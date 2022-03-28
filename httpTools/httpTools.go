@@ -19,9 +19,11 @@ func POST(url string, token string, postData interface{}, timeOutSec int, respRe
 }
 
 func request(method string, url string, token string, postData interface{}, timeOutSec int, respResult interface{}) error {
-	t := reflect.TypeOf(respResult).Kind()
-	if t != reflect.Ptr && t != reflect.Slice && t != reflect.Map {
-		return errors.New("value only support Pointer Slice and Map")
+	if respResult != nil {
+		t := reflect.TypeOf(respResult).Kind()
+		if t != reflect.Ptr && t != reflect.Slice && t != reflect.Map {
+			return errors.New("value only support Pointer Slice and Map")
+		}
 	}
 
 	r := req.New()

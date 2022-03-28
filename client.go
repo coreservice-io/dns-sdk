@@ -1,6 +1,8 @@
 package dns_client
 
 import (
+	"errors"
+
 	"github.com/coreservice-io/dns-client/httpTools"
 	"github.com/coreservice-io/dns-common/commonMsg"
 	"github.com/coreservice-io/dns-common/model"
@@ -13,7 +15,7 @@ type Client struct {
 	Domain   *model.Domain
 }
 
-func New(token string, endPoint string, domain string) (*Client, error) {
+func New(token string, domain string, endPoint string) (*Client, error) {
 	//get userInfo
 	url := endPoint + "/api/user/info"
 	var userInfo commonMsg.UserInfoResp
@@ -21,17 +23,9 @@ func New(token string, endPoint string, domain string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-
-	////get domain
-	//url = endPoint + "/api/domain/query"
-	//var domainResp commonMsg.QueryDomainResp
-	//err = httpTools.POST(url, token, &commonMsg.QueryDomainMsg{"", userInfo.ID, 0, 0}, 5, &domainResp)
-	//if err != nil {
-	//	return nil, err
-	//}
-	//if len(domainResp.DomainList) == 0 {
-	//	return nil, errors.New("domain not exist")
-	//}
+	if userInfo.ID == 0 {
+		return nil, errors.New("user not exist")
+	}
 
 	//get domain
 	url = endPoint + "/api/domain/querybyname"
@@ -39,6 +33,9 @@ func New(token string, endPoint string, domain string) (*Client, error) {
 	err = httpTools.POST(url, token, &commonMsg.QueryDomainByNameMsg{domain}, 5, &respDomain)
 	if err != nil {
 		return nil, err
+	}
+	if respDomain.ID == 0 {
+		return nil, errors.New("domain not exist")
 	}
 
 	client := &Client{
