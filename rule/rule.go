@@ -9,10 +9,10 @@ import (
 	"github.com/coreservice-io/dns-sdk/httpTools"
 )
 
-func AddRuleByRecordName(recordName string, recordType string, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*model.Rule, error) {
+func AddRuleByRecordName(domain string, recordName string, recordType string, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*model.Rule, error) {
 	url := client.EndPoint + "/api/rule/addbyrecordname"
 	postData := commonMsg.AddRuleByRecordNameMsg{
-		DomainId:      client.Domain.ID,
+		DomainName:    domain,
 		RecordName:    recordName,
 		RecordType:    recordType,
 		SysVersion:    version,
@@ -34,7 +34,7 @@ func AddRuleByRecordName(recordName string, recordType string, version int, cont
 }
 
 func AddRuleByRecordId(recordId uint, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*model.Rule, error) {
-	url := client.EndPoint + fmt.Sprintf("/api/rule/query/%d", recordId)
+	url := client.EndPoint + "/api/rule/add"
 	postData := commonMsg.AddRuleMsg{
 		RecordId:      recordId,
 		SysVersion:    version,
@@ -55,10 +55,10 @@ func AddRuleByRecordId(recordId uint, version int, continentCode string, country
 	return &newRule, nil
 }
 
-func QueryRulesByRecordName(recordName string, recordType string, client *dns_client.Client) ([]model.Rule, error) {
+func QueryRulesByRecordName(domain string, recordName string, recordType string, client *dns_client.Client) ([]model.Rule, error) {
 	url := client.EndPoint + "/api/rule/querybyrecordname"
 	postData := commonMsg.QueryRulesByRecordNameMsg{
-		DomainId:   client.Domain.ID,
+		DomainName: domain,
 		RecordName: recordName,
 		RecordType: recordType,
 	}

@@ -3,6 +3,7 @@ package main
 import (
 	"log"
 
+	dns_common "github.com/coreservice-io/dns-common"
 	dns_client "github.com/coreservice-io/dns-sdk"
 	"github.com/coreservice-io/dns-sdk/record"
 )
@@ -12,12 +13,12 @@ var domain = "mesoncdn.com"
 var endPoint = "http://127.0.0.1:9001"
 
 func AddRecord() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	newRecord, err := record.Add("pullzone1", "CNAME", 600, client)
+	newRecord, err := record.Add(domain, "pullzone2", dns_common.TypeCNAME, 600, client)
 	if err != nil {
 		log.Println(err)
 	}
@@ -27,12 +28,12 @@ func AddRecord() {
 }
 
 func ForbiddenRecordByName() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = record.ForbiddenByRecordName("pullzone1", true, client)
+	err = record.ForbiddenByRecordName(domain, "pullzone1", true, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -41,12 +42,12 @@ func ForbiddenRecordByName() {
 }
 
 func ForbiddenRecordById() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = record.ForbiddenByRecordId(5, true, client)
+	err = record.ForbiddenByRecordId(10, true, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -55,12 +56,12 @@ func ForbiddenRecordById() {
 }
 
 func ActiveRecordByName() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = record.ForbiddenByRecordName("pullzone1", false, client)
+	err = record.ForbiddenByRecordName(domain, "pullzone1", false, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -69,12 +70,12 @@ func ActiveRecordByName() {
 }
 
 func ActiveRecordById() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = record.ForbiddenByRecordId(5, false, client)
+	err = record.ForbiddenByRecordId(10, false, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -83,12 +84,12 @@ func ActiveRecordById() {
 }
 
 func QueryByNamePattern() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	records, totalCount, err := record.QueryByNamePattern("", 1, 0, client)
+	records, totalCount, err := record.QueryByNamePattern(domain, "", 0, 0, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -100,12 +101,12 @@ func QueryByNamePattern() {
 }
 
 func QueryByNameArray() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	records, err := record.QueryByGivenList([]string{"pullzone1"}, client)
+	records, err := record.QueryByGivenList(domain, []string{"pullzone1"}, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -117,12 +118,12 @@ func QueryByNameArray() {
 }
 
 func DeleteByName() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = record.DeleteByRecordName("pullzone1", "CNAME", client)
+	err = record.DeleteByRecordName(domain, "test", dns_common.TypeA, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -131,7 +132,7 @@ func DeleteByName() {
 }
 
 func DeleteById() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -148,7 +149,7 @@ func main() {
 	//AddRecord()
 	//
 	//QueryByNameArray()
-	QueryByNamePattern()
+	//QueryByNamePattern()
 
 	//ForbiddenRecordByName()
 	//ForbiddenRecordById()

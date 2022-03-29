@@ -6,12 +6,12 @@ import (
 	"github.com/coreservice-io/dns-sdk/httpTools"
 )
 
-func Apply(applyDomain string, pullZoneName string, client *dns_client.Client) (cert string, key string, err error) {
+func Apply(applyDomain string, pullZoneName string, hostedDomain string, client *dns_client.Client) (cert string, key string, err error) {
 	url := client.EndPoint + "/api/cert/apply/custom"
 	postData := commonMsg.CustomDomainCertMsg{
 		ApplyDomain:  applyDomain,
 		PullZoneName: pullZoneName,
-		HostedDomain: client.Domain.Name,
+		HostedDomain: hostedDomain,
 	}
 
 	var certInfo commonMsg.CertContentResp

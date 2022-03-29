@@ -14,12 +14,12 @@ var domain = "mesoncdn.com"
 var endPoint = "http://127.0.0.1:9001"
 
 func AddRuleByRecordName() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	newRule, err := rule.AddRuleByRecordName("pullzone1", dns_common.TypeCNAME, 0, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayEnd, dns_common.DayEnd, "www.google.com", 100, client)
+	newRule, err := rule.AddRuleByRecordName(domain, "pullzone1", dns_common.TypeCNAME, 0, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayStart, dns_common.DayEnd, "www.google.com", 100, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -28,12 +28,12 @@ func AddRuleByRecordName() {
 }
 
 func AddRuleByRecordId() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	newRule, err := rule.AddRuleByRecordId(5, 0, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayEnd, dns_common.DayEnd, "www.google.com", 100, client)
+	newRule, err := rule.AddRuleByRecordId(9, 0, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayStart, dns_common.DayEnd, "www.youtube.com", 100, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -42,12 +42,12 @@ func AddRuleByRecordId() {
 }
 
 func QueryRuleByRecordName() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	rules, err := rule.QueryRulesByRecordName("pullzone1", dns_common.TypeCNAME, client)
+	rules, err := rule.QueryRulesByRecordName(domain, "pullzone1", dns_common.TypeCNAME, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -59,12 +59,12 @@ func QueryRuleByRecordName() {
 }
 
 func QueryRuleByRecordId() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	rules, err := rule.QueryRulesByRecordId(5, client)
+	rules, err := rule.QueryRulesByRecordId(9, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -76,12 +76,12 @@ func QueryRuleByRecordId() {
 }
 
 func UpdateRule() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = rule.UpdateRule(5, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayEnd, dns_common.DayEnd, "www.google.com", 100, client)
+	err = rule.UpdateRule(15, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayEnd, dns_common.DayEnd, "www.google333.com", 100, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -90,12 +90,12 @@ func UpdateRule() {
 }
 
 func DeleteRule() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
 
-	err = rule.Delete(5, client)
+	err = rule.Delete(15, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -104,13 +104,13 @@ func DeleteRule() {
 }
 
 func main() {
-	AddRuleByRecordName()
-	AddRuleByRecordId()
+	//AddRuleByRecordName()
+	//AddRuleByRecordId()
 
-	QueryRuleByRecordName()
-	QueryRuleByRecordId()
-
-	UpdateRule()
-
+	//QueryRuleByRecordName()
+	//QueryRuleByRecordId()
+	//
+	//UpdateRule()
+	//
 	DeleteRule()
 }

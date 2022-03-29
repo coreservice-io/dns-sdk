@@ -12,7 +12,7 @@ var domain = "mesoncdn.com"
 var endPoint = "http://127.0.0.1:9001"
 
 func ApplyCert() {
-	client, err := dns_client.New(token, domain, endPoint)
+	client, err := dns_client.New(token, endPoint)
 	if err != nil {
 		log.Fatalln(err)
 	}
@@ -23,7 +23,7 @@ func ApplyCert() {
 	//1. CNAME  www.somedomain.com => pullzonexxx.mesoncdn.com
 	//2. CNAME  _acme-challenge.example.somedomain.com => _acme-challenge.example.pullzonexxx.mesoncdn.com
 
-	cert, key, err := cert.Apply(applyDomain, pullZoneName, client)
+	cert, key, err := cert.Apply(applyDomain, pullZoneName, domain, client)
 	if err != nil {
 		log.Println(err)
 	} else {
