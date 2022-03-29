@@ -3,8 +3,8 @@ package main
 import (
 	"log"
 
-	dns_client "github.com/coreservice-io/dns-client"
-	"github.com/coreservice-io/dns-client/cert"
+	dns_client "github.com/coreservice-io/dns-sdk"
+	"github.com/coreservice-io/dns-sdk/cert"
 )
 
 var token = "cxwinggdadlzdhpcyktmikjj"

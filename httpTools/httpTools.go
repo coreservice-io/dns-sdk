@@ -6,7 +6,7 @@ import (
 	"reflect"
 	"time"
 
-	"github.com/coreservice-io/dns-client/respMsg"
+	"github.com/coreservice-io/dns-sdk/respMsg"
 	"github.com/imroc/req"
 )
 

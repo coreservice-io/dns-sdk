@@ -3,9 +3,9 @@ package dns_client
 import (
 	"errors"
 
-	"github.com/coreservice-io/dns-client/httpTools"
 	"github.com/coreservice-io/dns-common/commonMsg"
 	"github.com/coreservice-io/dns-common/model"
+	"github.com/coreservice-io/dns-sdk/httpTools"
 )
 
 type Client struct {

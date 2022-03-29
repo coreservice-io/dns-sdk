@@ -1,29 +1,21 @@
 package rule
 
 import (
-	"errors"
-	"strconv"
+	"fmt"
 
-	dns_client "github.com/coreservice-io/dns-client"
-	"github.com/coreservice-io/dns-client/httpTools"
-	"github.com/coreservice-io/dns-client/record"
 	"github.com/coreservice-io/dns-common/commonMsg"
 	"github.com/coreservice-io/dns-common/model"
+	dns_client "github.com/coreservice-io/dns-sdk"
+	"github.com/coreservice-io/dns-sdk/httpTools"
 )
 
-func Add(recordName string, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*model.Rule, error) {
-	recordInfo, err := record.QueryByGivenList([]string{recordName}, client)
-	if err != nil {
-		return nil, err
-	}
-	if len(recordInfo) == 0 {
-		return nil, errors.New("record not exist")
-	}
-
-	url := client.EndPoint + "/api/rule/add"
-	postData := commonMsg.AddRuleMsg{
+func AddRuleByRecordName(recordName string, recordType string, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*model.Rule, error) {
+	url := client.EndPoint + "/api/rule/addbyrecordname"
+	postData := commonMsg.AddRuleByRecordNameMsg{
+		DomainId:      client.Domain.ID,
+		RecordName:    recordName,
+		RecordType:    recordType,
 		SysVersion:    version,
-		RecordId:      recordInfo[0].ID,
 		ContinentCode: continentCode,
 		CountryCode:   countryCode,
 		StartTime:     startTime,
@@ -33,7 +25,7 @@ func Add(recordName string, version int, continentCode string, countryCode strin
 	}
 
 	var newRule model.Rule
-	err = httpTools.POST(url, client.Token, postData, 10, &newRule)
+	err := httpTools.POST(url, client.Token, postData, 10, &newRule)
 	if err != nil {
 		return nil, err
 	}
@@ -41,30 +33,77 @@ func Add(recordName string, version int, continentCode string, countryCode strin
 	return &newRule, nil
 }
 
-func QueryRules(recordName string, client *dns_client.Client) ([]model.Rule, error) {
-	recordInfo, err := record.QueryByGivenList([]string{recordName}, client)
+func AddRuleByRecordId(recordId uint, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*model.Rule, error) {
+	url := client.EndPoint + fmt.Sprintf("/api/rule/query/%d", recordId)
+	postData := commonMsg.AddRuleMsg{
+		RecordId:      recordId,
+		SysVersion:    version,
+		ContinentCode: continentCode,
+		CountryCode:   countryCode,
+		StartTime:     startTime,
+		EndTime:       endTime,
+		Destination:   dest,
+		Weight:        weight,
+	}
+
+	var newRule model.Rule
+	err := httpTools.POST(url, client.Token, postData, 10, &newRule)
 	if err != nil {
 		return nil, err
 	}
-	if len(recordInfo) == 0 {
-		return nil, errors.New("record not exist")
+
+	return &newRule, nil
+}
+
+func QueryRulesByRecordName(recordName string, recordType string, client *dns_client.Client) ([]model.Rule, error) {
+	url := client.EndPoint + "/api/rule/querybyrecordname"
+	postData := commonMsg.QueryRulesByRecordNameMsg{
+		DomainId:   client.Domain.ID,
+		RecordName: recordName,
+		RecordType: recordType,
 	}
-
-	recordIdStr := strconv.FormatUint(uint64(recordInfo[0].ID), 10)
-
-	url := client.EndPoint + "/api/rule/query/" + recordIdStr
-	var newRule []model.Rule
-	err = httpTools.Get(url, client.Token, 10, &newRule)
+	var rules []model.Rule
+	err := httpTools.POST(url, client.Token, postData, 10, &rules)
 	if err != nil {
 		return nil, err
 	}
-	return newRule, nil
+	return rules, nil
 }
 
-func Delete() {
-
+func QueryRulesByRecordId(recordId uint, client *dns_client.Client) ([]model.Rule, error) {
+	url := client.EndPoint + fmt.Sprintf("/api/rule/query/%d", recordId)
+	var rules []model.Rule
+	err := httpTools.Get(url, client.Token, 10, &rules)
+	if err != nil {
+		return nil, err
+	}
+	return rules, nil
 }
 
-func UpdateSysRule() {
+func Delete(ruleId uint, client *dns_client.Client) error {
+	url := client.EndPoint + fmt.Sprintf("/api/rule/delete/%d", ruleId)
+	err := httpTools.Get(url, client.Token, 10, nil)
+	if err != nil {
+		return err
+	}
+	return nil
+}
 
+func UpdateRule(ruleId uint, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) error {
+	url := client.EndPoint + fmt.Sprintf("/api/rule/update/%d", ruleId)
+	postData := commonMsg.UpdateRuleMsg{
+		ContinentCode: &continentCode,
+		CountryCode:   &countryCode,
+		StartTime:     &startTime,
+		EndTime:       &endTime,
+		Destination:   &dest,
+		Weight:        &weight,
+	}
+
+	err := httpTools.POST(url, client.Token, postData, 10, nil)
+	if err != nil {
+		return err
+	}
+
+	return nil
 }

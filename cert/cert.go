@@ -1,9 +1,9 @@
 package cert
 
 import (
-	dns_client "github.com/coreservice-io/dns-client"
-	"github.com/coreservice-io/dns-client/httpTools"
 	"github.com/coreservice-io/dns-common/commonMsg"
+	dns_client "github.com/coreservice-io/dns-sdk"
+	"github.com/coreservice-io/dns-sdk/httpTools"
 )
 
 func Apply(applyDomain string, pullZoneName string, client *dns_client.Client) (cert string, key string, err error) {
