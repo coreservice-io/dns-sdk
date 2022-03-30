@@ -2,61 +2,113 @@ package httpTools
 
 import (
 	"errors"
-	"fmt"
 	"reflect"
 	"time"
 
-	"github.com/coreservice-io/dns-sdk/respMsg"
 	"github.com/imroc/req"
 )
 
-func Get(url string, token string, timeOutSec int, respResult interface{}) error {
-	return request("GET", url, token, nil, timeOutSec, respResult)
+type RespBody struct {
+	Status int         `json:"status" `
+	Result interface{} `json:"result" `
+	Msg    string      `json:"msg" `
 }
 
-func POST(url string, token string, postData interface{}, timeOutSec int, respResult interface{}) error {
-	return request("POST", url, token, postData, timeOutSec, respResult)
+const post = "POST"
+const get = "GET"
+const API_TIMEOUT_SECS = 10
+
+type ApiRequest struct {
+	Err            error
+	HttpStatusCode int
+	Result         interface{}
 }
 
-func request(method string, url string, token string, postData interface{}, timeOutSec int, respResult interface{}) error {
-	if respResult != nil {
-		t := reflect.TypeOf(respResult).Kind()
+func (err *ApiRequest) Ok() bool {
+	return err.Err == nil && err.HttpStatusCode == 200
+}
+
+func (err *ApiRequest) IsHttpError() bool {
+	return err.HttpStatusCode != 200
+}
+
+func Get(url string, token string, apiq *ApiRequest) {
+	request(get, url, token, nil, API_TIMEOUT_SECS, apiq)
+}
+
+func Get_(url string, token string, timeOutSec int, apiq *ApiRequest) {
+	request(get, url, token, nil, timeOutSec, apiq)
+}
+
+func POST(url string, token string, postData interface{}, apiq *ApiRequest) {
+	request(post, url, token, postData, API_TIMEOUT_SECS, apiq)
+}
+
+func POST_(url string, token string, postData interface{}, timeOutSec int, apiq *ApiRequest) {
+	request(post, url, token, postData, timeOutSec, apiq)
+}
+
+func request(method string, url string, token string, postData interface{}, timeOutSec int, apiq *ApiRequest) {
+	if apiq.Result != nil {
+		t := reflect.TypeOf(apiq.Result).Kind()
 		if t != reflect.Ptr && t != reflect.Slice && t != reflect.Map {
-			return errors.New("value only support Pointer Slice and Map")
+			apiq.Err = errors.New("value only support Pointer Slice and Map")
+			apiq.HttpStatusCode = 200
+			return
 		}
 	}
 
-	r := req.New()
 	authHeader := req.Header{
-		"Accept":        "application/json",
-		"Authorization": "Bearer " + token,
+		"Accept": "application/json",
 	}
+
+	if token != "" {
+		authHeader["Authorization"] = "Bearer " + token
+	}
+
+	r := req.New()
 	r.SetTimeout(time.Duration(timeOutSec) * time.Second)
+
 	var resp *req.Resp
 	var err error
+
 	switch method {
-	case "GET":
+	case get:
 		resp, err = r.Get(url, authHeader)
-	case "POST":
+	case post:
 		resp, err = r.Post(url, authHeader, req.BodyJSON(postData))
 	default:
-		return fmt.Errorf("unsupported request method:%s", method)
+		// imposssible
 	}
+
 	if err != nil {
-		return err
+		apiq.Err = err
+		apiq.HttpStatusCode = 200
+		return
 	}
+
 	if resp.Response().StatusCode != 200 {
-		return fmt.Errorf("network error, http code:%d", resp.Response().StatusCode)
+		apiq.Err = errors.New("network error")
+		apiq.HttpStatusCode = resp.Response().StatusCode
+		return
 	}
-	respData := &respMsg.RespBody{
-		Result: respResult,
+
+	respData := &RespBody{
+		Result: apiq.Result,
 	}
 	err = resp.ToJSON(&respData)
 	if err != nil {
-		return err
+		apiq.Err = err
+		apiq.HttpStatusCode = 200
+		return
 	}
+
 	if respData.Status <= 0 {
-		return errors.New(respData.Msg)
+		apiq.Err = errors.New(respData.Msg)
+		apiq.HttpStatusCode = 200
+		return
 	}
-	return nil
+
+	apiq.Err = nil
+	apiq.HttpStatusCode = 200
 }

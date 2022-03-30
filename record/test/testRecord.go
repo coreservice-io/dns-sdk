@@ -23,8 +23,6 @@ func AddRecord() {
 		log.Println(err)
 	}
 	log.Println("newRecord:", newRecord)
-	//recordName pullzone1
-	//recordId
 }
 
 func ForbiddenRecordByName() {
@@ -89,7 +87,7 @@ func QueryByNamePattern() {
 		log.Fatalln(err)
 	}
 
-	records, totalCount, err := record.QueryByNamePattern(domain, "", 0, 0, client)
+	records, totalCount, err := record.QueryByNamePattern(domain, "", 0, "", 0, 0, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -106,7 +104,7 @@ func QueryByNameArray() {
 		log.Fatalln(err)
 	}
 
-	records, err := record.QueryByGivenList(domain, []string{"pullzone1"}, client)
+	records, err := record.QueryByGivenList(domain, []string{"pullzone1"}, dns_common.TypeCNAME, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {

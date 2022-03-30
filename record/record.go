@@ -6,12 +6,12 @@ import (
 
 	dns_common "github.com/coreservice-io/dns-common"
 	"github.com/coreservice-io/dns-common/commonMsg"
-	"github.com/coreservice-io/dns-common/model"
+	"github.com/coreservice-io/dns-common/data"
 	dns_client "github.com/coreservice-io/dns-sdk"
 	"github.com/coreservice-io/dns-sdk/httpTools"
 )
 
-func Add(domain string, recordName string, recordType string, ttl uint32, client *dns_client.Client) (*model.Record, error) {
+func Add(domain string, recordName string, recordType string, ttl uint32, client *dns_client.Client) (*data.Record, error) {
 	if recordType != dns_common.TypeCNAME && recordType != dns_common.TypeA {
 		return nil, errors.New("only support A and CNAME record")
 	}
@@ -24,10 +24,13 @@ func Add(domain string, recordName string, recordType string, ttl uint32, client
 		TTL:        ttl,
 	}
 
-	var newRecord model.Record
-	err := httpTools.POST(url, client.Token, postData, 10, &newRecord)
-	if err != nil {
-		return nil, err
+	var newRecord data.Record
+	req := httpTools.ApiRequest{
+		Result: newRecord,
+	}
+	httpTools.POST(url, client.Token, postData, &req)
+	if !req.Ok() {
+		return nil, req.Err
 	}
 
 	return &newRecord, nil
@@ -40,18 +43,20 @@ func DeleteByRecordName(domain string, recordName string, recordType string, cli
 		RecordName: recordName,
 		RecordType: recordType,
 	}
-	err := httpTools.POST(url, client.Token, postData, 10, nil)
-	if err != nil {
-		return err
+	req := httpTools.ApiRequest{}
+	httpTools.POST(url, client.Token, postData, nil)
+	if !req.Ok() {
+		return req.Err
 	}
 	return nil
 }
 
 func DeleteByRecordId(recordId uint, client *dns_client.Client) error {
 	url := client.EndPoint + fmt.Sprintf("/api/record/delete/%d", recordId)
-	err := httpTools.Get(url, client.Token, 10, nil)
-	if err != nil {
-		return err
+	req := httpTools.ApiRequest{}
+	httpTools.Get(url, client.Token, nil)
+	if !req.Ok() {
+		return req.Err
 	}
 	return nil
 }
@@ -63,9 +68,10 @@ func ForbiddenByRecordName(domain string, recordName string, forbidden bool, cli
 		RecordName: recordName,
 		Forbidden:  &forbidden,
 	}
-	err := httpTools.POST(url, client.Token, postData, 5, nil)
-	if err != nil {
-		return err
+	req := httpTools.ApiRequest{}
+	httpTools.POST(url, client.Token, postData, nil)
+	if !req.Ok() {
+		return req.Err
 	}
 	return nil
 }
@@ -75,9 +81,10 @@ func ForbiddenByRecordId(recordId uint, forbidden bool, client *dns_client.Clien
 	postData := commonMsg.UpdateRecordMsg{
 		Forbidden: &forbidden,
 	}
-	err := httpTools.POST(url, client.Token, postData, 5, nil)
-	if err != nil {
-		return err
+	req := httpTools.ApiRequest{}
+	httpTools.POST(url, client.Token, postData, nil)
+	if !req.Ok() {
+		return req.Err
 	}
 	return nil
 }
@@ -90,9 +97,10 @@ func UpdateByRecordName(domain string, recordName string, ttl uint32, forbidden 
 		TTL:        &ttl,
 		Forbidden:  &forbidden,
 	}
-	err := httpTools.POST(url, client.Token, postData, 5, nil)
-	if err != nil {
-		return err
+	req := httpTools.ApiRequest{}
+	httpTools.POST(url, client.Token, postData, nil)
+	if !req.Ok() {
+		return req.Err
 	}
 	return nil
 }
@@ -103,39 +111,51 @@ func UpdateByRecordId(recordId uint, ttl uint32, forbidden bool, client *dns_cli
 		TTL:       &ttl,
 		Forbidden: &forbidden,
 	}
-	err := httpTools.POST(url, client.Token, postData, 5, nil)
-	if err != nil {
-		return err
+	req := httpTools.ApiRequest{}
+	httpTools.POST(url, client.Token, postData, &req)
+	if !req.Ok() {
+		return req.Err
 	}
 	return nil
 }
 
-func QueryByGivenList(domain string, recordNameArray []string, client *dns_client.Client) ([]model.Record, error) {
+func QueryByGivenList(domain string, recordNameArray []string, recordType string, client *dns_client.Client) ([]data.Record, error) {
 	url := client.EndPoint + "/api/record/querylist"
 	postData := commonMsg.QueryRecordListMsg{
 		DomainName:     domain,
 		RecordNameList: recordNameArray,
+		RecordType:     recordType,
 	}
-	var records []model.Record
-	err := httpTools.POST(url, client.Token, postData, 5, &records)
-	if err != nil {
-		return nil, err
+	var records []data.Record
+	req := httpTools.ApiRequest{
+		Result: &records,
+	}
+	httpTools.POST(url, client.Token, postData, &req)
+	if !req.Ok() {
+		return nil, req.Err
 	}
 	return records, nil
 }
 
-func QueryByNamePattern(domain string, namePattern string, limit int, offset int, client *dns_client.Client) (records []*model.Record, totalCount int64, err error) {
+// QueryByNamePattern query records by recordName pattern, recordId, recordType
+//  if set namePattern="",recordId=0 or recordType="",query will ignore the condition
+func QueryByNamePattern(domain string, namePattern string, recordId uint, recordType string, limit int, offset int, client *dns_client.Client) (records []*data.Record, totalCount int64, e error) {
 	url := client.EndPoint + "/api/record/querybydomainname"
 	postData := commonMsg.QueryRecordByDomainNameMsg{
 		DomainName:  domain,
 		NamePattern: namePattern,
+		RecordId:    recordId,
+		RecordType:  recordType,
 		Limit:       limit,
 		Offset:      offset,
 	}
 	var respInfo commonMsg.QueryRecordResp
-	err = httpTools.POST(url, client.Token, postData, 5, &respInfo)
-	if err != nil {
-		return nil, 0, err
+	req := httpTools.ApiRequest{
+		Result: &respInfo,
+	}
+	httpTools.POST(url, client.Token, postData, &req)
+	if !req.Ok() {
+		return nil, 0, req.Err
 	}
 	return respInfo.Records, respInfo.Count, nil
 }

@@ -109,8 +109,8 @@ func main() {
 
 	//QueryRuleByRecordName()
 	//QueryRuleByRecordId()
-	//
+
 	//UpdateRule()
-	//
-	DeleteRule()
+
+	//DeleteRule()
 }

@@ -15,9 +15,12 @@ func Apply(applyDomain string, pullZoneName string, hostedDomain string, client 
 	}
 
 	var certInfo commonMsg.CertContentResp
-	err = httpTools.POST(url, client.Token, postData, 120, &certInfo)
-	if err != nil {
-		return "", "", err
+	req := httpTools.ApiRequest{
+		Result: &certInfo,
+	}
+	httpTools.POST_(url, client.Token, postData, 120, &req)
+	if !req.Ok() {
+		return "", "", req.Err
 	}
 	return certInfo.CertContent, certInfo.KeyContent, nil
 }

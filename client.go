@@ -17,9 +17,12 @@ func New(token string, endPoint string) (*Client, error) {
 	//get userInfo
 	url := endPoint + "/api/user/info"
 	var userInfo commonMsg.UserInfoResp
-	err := httpTools.Get(url, token, 5, &userInfo)
-	if err != nil {
-		return nil, err
+	req := httpTools.ApiRequest{
+		Result: &userInfo,
+	}
+	httpTools.Get(url, token, &req)
+	if !req.Ok() {
+		return nil, req.Err
 	}
 	if userInfo.ID == 0 {
 		return nil, errors.New("user not exist")

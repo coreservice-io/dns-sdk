@@ -21,7 +21,7 @@ func ApplyCert() {
 	pullZoneName := "pullzonexxx"
 	//before apply must set dns record in customer's dns server
 	//1. CNAME  www.somedomain.com => pullzonexxx.mesoncdn.com
-	//2. CNAME  _acme-challenge.example.somedomain.com => _acme-challenge.example.pullzonexxx.mesoncdn.com
+	//2. CNAME  _acme-challenge.www.somedomain.com => _acme-challenge.www.pullzonexxx.mesoncdn.com
 
 	cert, key, err := cert.Apply(applyDomain, pullZoneName, domain, client)
 	if err != nil {
