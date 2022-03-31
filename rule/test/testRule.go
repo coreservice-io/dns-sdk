@@ -47,7 +47,7 @@ func QueryRuleByRecordName() {
 		log.Fatalln(err)
 	}
 
-	rules, err := rule.QueryRulesByRecordName(domain, "pullzone1", dns_common.TypeCNAME, client)
+	rules, err := rule.QueryRulesByRecordName(domain, "pullzone2", dns_common.TypeCNAME, client)
 	if err != nil {
 		log.Fatalln(err)
 	} else {
@@ -107,7 +107,7 @@ func main() {
 	//AddRuleByRecordName()
 	//AddRuleByRecordId()
 
-	//QueryRuleByRecordName()
+	QueryRuleByRecordName()
 	//QueryRuleByRecordId()
 
 	//UpdateRule()
