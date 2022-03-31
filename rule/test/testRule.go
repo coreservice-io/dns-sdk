@@ -27,19 +27,19 @@ func AddRuleByRecordName() {
 	}
 }
 
-func AddRuleByRecordId() {
-	client, err := dns_client.New(token, endPoint)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	newRule, err := rule.AddRuleByRecordId(9, 0, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayStart, dns_common.DayEnd, "www.youtube.com", 100, client)
-	if err != nil {
-		log.Fatalln(err)
-	} else {
-		log.Println("newRule", newRule)
-	}
-}
+//func AddRuleByRecordId() {
+//	client, err := dns_client.New(token, endPoint)
+//	if err != nil {
+//		log.Fatalln(err)
+//	}
+//
+//	newRule, err := rule.AddRuleByRecordId(9, 0, ipGeo.AllContinent, ipGeo.AllCountry, dns_common.DayStart, dns_common.DayEnd, "www.youtube.com", 100, client)
+//	if err != nil {
+//		log.Fatalln(err)
+//	} else {
+//		log.Println("newRule", newRule)
+//	}
+//}
 
 func QueryRuleByRecordName() {
 	client, err := dns_client.New(token, endPoint)
@@ -58,22 +58,22 @@ func QueryRuleByRecordName() {
 	}
 }
 
-func QueryRuleByRecordId() {
-	client, err := dns_client.New(token, endPoint)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	rules, err := rule.QueryRulesByRecordId(9, client)
-	if err != nil {
-		log.Fatalln(err)
-	} else {
-		log.Println("rules")
-		for _, v := range rules {
-			log.Println(v)
-		}
-	}
-}
+//func QueryRuleByRecordId() {
+//	client, err := dns_client.New(token, endPoint)
+//	if err != nil {
+//		log.Fatalln(err)
+//	}
+//
+//	rules, err := rule.QueryRulesByRecordId(9, client)
+//	if err != nil {
+//		log.Fatalln(err)
+//	} else {
+//		log.Println("rules")
+//		for _, v := range rules {
+//			log.Println(v)
+//		}
+//	}
+//}
 
 func UpdateRule() {
 	client, err := dns_client.New(token, endPoint)

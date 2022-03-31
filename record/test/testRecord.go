@@ -39,19 +39,19 @@ func ForbiddenRecordByName() {
 	}
 }
 
-func ForbiddenRecordById() {
-	client, err := dns_client.New(token, endPoint)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	err = record.ForbiddenByRecordId(10, true, client)
-	if err != nil {
-		log.Fatalln(err)
-	} else {
-		log.Println("record forbidden")
-	}
-}
+//func ForbiddenRecordById() {
+//	client, err := dns_client.New(token, endPoint)
+//	if err != nil {
+//		log.Fatalln(err)
+//	}
+//
+//	err = record.ForbiddenByRecordId(10, true, client)
+//	if err != nil {
+//		log.Fatalln(err)
+//	} else {
+//		log.Println("record forbidden")
+//	}
+//}
 
 func ActiveRecordByName() {
 	client, err := dns_client.New(token, endPoint)
@@ -67,19 +67,19 @@ func ActiveRecordByName() {
 	}
 }
 
-func ActiveRecordById() {
-	client, err := dns_client.New(token, endPoint)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	err = record.ForbiddenByRecordId(10, false, client)
-	if err != nil {
-		log.Fatalln(err)
-	} else {
-		log.Println("record active")
-	}
-}
+//func ActiveRecordById() {
+//	client, err := dns_client.New(token, endPoint)
+//	if err != nil {
+//		log.Fatalln(err)
+//	}
+//
+//	err = record.ForbiddenByRecordId(10, false, client)
+//	if err != nil {
+//		log.Fatalln(err)
+//	} else {
+//		log.Println("record active")
+//	}
+//}
 
 func QueryByNamePattern() {
 	client, err := dns_client.New(token, endPoint)
@@ -129,19 +129,19 @@ func DeleteByName() {
 	}
 }
 
-func DeleteById() {
-	client, err := dns_client.New(token, endPoint)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	err = record.DeleteByRecordId(5, client)
-	if err != nil {
-		log.Fatalln(err)
-	} else {
-		log.Println("delete success")
-	}
-}
+//func DeleteById() {
+//	client, err := dns_client.New(token, endPoint)
+//	if err != nil {
+//		log.Fatalln(err)
+//	}
+//
+//	err = record.DeleteByRecordId(5, client)
+//	if err != nil {
+//		log.Fatalln(err)
+//	} else {
+//		log.Println("delete success")
+//	}
+//}
 
 func main() {
 	//AddRecord()

@@ -8,6 +8,8 @@ github.com/coreservice-io/LogrusULog v0.1.18/go.mod h1:9ptUgo0PIKXv7L5y9TDDD6vUb
 github.com/coreservice-io/UJob v0.1.5/go.mod h1:/ZTM07jDA1yDF8ZaAT5+RnHsdL8Je/UHZ8y7HRuIZVY=
 github.com/coreservice-io/ULog v0.1.16/go.mod h1:AUDPBWJxVLwVXzge/aAV4p9AFcpzn1YyWU+u5b8s9Pg=
 github.com/coreservice-io/UReference v0.0.4/go.mod h1:Wv98y4kGOJyTqz8t55zxk0M/aeZCEfz+WL4RmK/+JQQ=
+github.com/coreservice-io/dns-common v0.0.4 h1:1C7VX3IOqeAoex/XpEnf6ZTB+lJKZNxY0cb1mFTycS8=
+github.com/coreservice-io/dns-common v0.0.4/go.mod h1:sne0PkgO+zMN0PEnldjyTFiKYw/cpnKkNEwbthEuzm0=
 github.com/coreservice-io/ipGeo v0.0.3 h1:f0vmhzJwksR3oTgMVHUI72xANF1r2i2Pf0irb3/JR2E=
 github.com/coreservice-io/ipGeo v0.0.3/go.mod h1:j3udK/TNVgEdPERV1r+KspwBrkPZJ+uI2OxxQRIlJo0=
 github.com/davecgh/go-spew v1.1.0/go.mod h1:J7Y8YcW2NihsgmVo/mv3lAwl/skON4iLHjSsI+c5H38=
