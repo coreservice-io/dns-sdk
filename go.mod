@@ -3,7 +3,7 @@ module github.com/coreservice-io/dns-sdk
 go 1.17
 
 require (
-	github.com/coreservice-io/dns-common v0.0.5
+	github.com/coreservice-io/dns-common v0.0.6
 	github.com/coreservice-io/ipGeo v0.0.3
 	github.com/imroc/req v0.3.2
 
