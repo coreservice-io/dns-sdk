@@ -14,7 +14,7 @@ func Add(domain string, recordName string, recordType string, ttl uint32, client
 		return nil, errors.New("only support A and CNAME record")
 	}
 
-	url := client.EndPoint + "/api/record/addbydomainname"
+	url := client.EndPoint + "/api/record/add_by_domain_name"
 	postData := commonMsg.Msg_Req_AddRecordByDomainName{
 		DomainName: domain,
 		Name:       recordName,
@@ -35,7 +35,7 @@ func Add(domain string, recordName string, recordType string, ttl uint32, client
 }
 
 func DeleteByRecordName(domain string, recordName string, recordType string, client *dns_client.Client) error {
-	url := client.EndPoint + "/api/record/deletebyname"
+	url := client.EndPoint + "/api/record/delete_by_record_name"
 	postData := commonMsg.Msg_Req_DeleteRecordByName{
 		DomainName: domain,
 		RecordName: recordName,
@@ -66,7 +66,7 @@ func DeleteByRecordName(domain string, recordName string, recordType string, cli
 //}
 
 func ForbiddenByRecordName(domain string, recordName string, forbidden bool, client *dns_client.Client) error {
-	url := client.EndPoint + "/api/record/updatebyname"
+	url := client.EndPoint + "/api/record/update_by_record_name"
 	postData := commonMsg.Msg_Req_UpdateRecordByName{
 		DomainName: domain,
 		RecordName: recordName,
@@ -100,7 +100,7 @@ func ForbiddenByRecordName(domain string, recordName string, forbidden bool, cli
 //}
 
 func UpdateByRecordName(domain string, recordName string, ttl uint32, forbidden bool, client *dns_client.Client) error {
-	url := client.EndPoint + "/api/record/updatebyname"
+	url := client.EndPoint + "/api/record/update_by_record_name"
 	postData := commonMsg.Msg_Req_UpdateRecordByName{
 		DomainName: domain,
 		RecordName: recordName,
@@ -136,7 +136,7 @@ func UpdateByRecordName(domain string, recordName string, ttl uint32, forbidden 
 //}
 
 func QueryByGivenList(domain string, recordNameArray []string, recordType string, client *dns_client.Client) ([]*commonMsg.Record, error) {
-	url := client.EndPoint + "/api/record/querylist"
+	url := client.EndPoint + "/api/record/query_by_given_name"
 	postData := commonMsg.Msg_Req_QueryRecordByGivenName{
 		DomainName:     domain,
 		RecordNameList: recordNameArray,
@@ -157,7 +157,7 @@ func QueryByGivenList(domain string, recordNameArray []string, recordType string
 // QueryByNamePattern query records by recordName pattern, recordId, recordType
 //  if set namePattern="",recordId=0 or recordType="",query will ignore the condition
 func QueryByNamePattern(domain string, namePattern string, recordId uint, recordType string, limit int, offset int, client *dns_client.Client) (records []*commonMsg.Record, totalCount int64, e error) {
-	url := client.EndPoint + "/api/record/querybydomainname"
+	url := client.EndPoint + "/api/record/query_by_domain_name"
 	postData := commonMsg.Msg_Req_QueryRecordByDomainName{
 		DomainName:  domain,
 		NamePattern: namePattern,

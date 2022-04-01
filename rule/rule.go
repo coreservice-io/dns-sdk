@@ -10,7 +10,7 @@ import (
 )
 
 func AddRuleByRecordName(domain string, recordName string, recordType string, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*commonMsg.Rule, error) {
-	url := client.EndPoint + "/api/rule/addbyrecordname"
+	url := client.EndPoint + "/api/rule/add_by_record_name"
 	postData := commonMsg.Msg_Req_AddRuleByRecordName{
 		DomainName:    domain,
 		RecordName:    recordName,
@@ -62,7 +62,7 @@ func AddRuleByRecordName(domain string, recordName string, recordType string, ve
 //}
 
 func QueryRulesByRecordName(domain string, recordName string, recordType string, client *dns_client.Client) ([]*commonMsg.Rule, error) {
-	url := client.EndPoint + "/api/rule/querybyrecordname"
+	url := client.EndPoint + "/api/rule/query_by_record_name"
 	postData := commonMsg.Msg_Req_QueryRulesByRecordName{
 		DomainName: domain,
 		RecordName: recordName,
