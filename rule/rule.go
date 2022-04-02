@@ -12,16 +12,16 @@ import (
 func AddRuleByRecordName(domain string, recordName string, recordType string, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*commonMsg.Rule, error) {
 	url := client.EndPoint + "/api/rule/add_by_record_name"
 	postData := commonMsg.Msg_Req_AddRuleByRecordName{
-		DomainName:    domain,
-		RecordName:    recordName,
-		RecordType:    recordType,
-		SysVersion:    version,
-		ContinentCode: continentCode,
-		CountryCode:   countryCode,
-		StartTime:     startTime,
-		EndTime:       endTime,
-		Destination:   dest,
-		Weight:        weight,
+		Domain_name:    domain,
+		Record_name:    recordName,
+		Record_type:    recordType,
+		Sys_version:    version,
+		Continent_code: continentCode,
+		Country_code:   countryCode,
+		Start_time:     startTime,
+		End_time:       endTime,
+		Destination:    dest,
+		Weight:         weight,
 	}
 
 	var resp commonMsg.Msg_Resp_RuleInfo
@@ -39,12 +39,12 @@ func AddRuleByRecordName(domain string, recordName string, recordType string, ve
 //func AddRuleByRecordId(recordId uint, version int, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) (*commonMsg.Rule, error) {
 //	url := client.EndPoint + "/api/rule/add"
 //	postData := commonMsg.Msg_Req_AddRule{
-//		RecordId:      recordId,
-//		SysVersion:    version,
-//		ContinentCode: continentCode,
-//		CountryCode:   countryCode,
-//		StartTime:     startTime,
-//		EndTime:       endTime,
+//		Record_id:      recordId,
+//		Sys_version:    version,
+//		Continent_code: continentCode,
+//		Country_code:   countryCode,
+//		Start_time:     startTime,
+//		End_time:       endTime,
 //		Destination:   dest,
 //		Weight:        weight,
 //	}
@@ -64,9 +64,9 @@ func AddRuleByRecordName(domain string, recordName string, recordType string, ve
 func QueryRulesByRecordName(domain string, recordName string, recordType string, client *dns_client.Client) ([]*commonMsg.Rule, error) {
 	url := client.EndPoint + "/api/rule/query_by_record_name"
 	postData := commonMsg.Msg_Req_QueryRulesByRecordName{
-		DomainName: domain,
-		RecordName: recordName,
-		RecordType: recordType,
+		Domain_name: domain,
+		Record_name: recordName,
+		Record_type: recordType,
 	}
 	var resp commonMsg.Msg_Resp_Rules
 	err := api.POST(url, client.Token, postData, &resp)
@@ -111,12 +111,12 @@ func Delete(ruleId uint, client *dns_client.Client) error {
 func UpdateRule(ruleId uint, continentCode string, countryCode string, startTime string, endTime string, dest string, weight int, client *dns_client.Client) error {
 	url := client.EndPoint + fmt.Sprintf("/api/rule/update/%d", ruleId)
 	postData := commonMsg.Msg_Req_UpdateRule{
-		ContinentCode: &continentCode,
-		CountryCode:   &countryCode,
-		StartTime:     &startTime,
-		EndTime:       &endTime,
-		Destination:   &dest,
-		Weight:        &weight,
+		Continent_code: &continentCode,
+		Country_code:   &countryCode,
+		Start_time:     &startTime,
+		End_time:       &endTime,
+		Destination:    &dest,
+		Weight:         &weight,
 	}
 
 	var resp api.API_META_STATUS

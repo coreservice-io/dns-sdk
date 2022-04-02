@@ -16,10 +16,10 @@ func Add(domain string, recordName string, recordType string, ttl uint32, client
 
 	url := client.EndPoint + "/api/record/add_by_domain_name"
 	postData := commonMsg.Msg_Req_AddRecordByDomainName{
-		DomainName: domain,
-		Name:       recordName,
-		Type:       recordType,
-		TTL:        ttl,
+		Domain_name: domain,
+		Name:        recordName,
+		Type:        recordType,
+		TTL:         ttl,
 	}
 
 	var resp commonMsg.Msg_Resp_RecordInfo
@@ -37,9 +37,9 @@ func Add(domain string, recordName string, recordType string, ttl uint32, client
 func DeleteByRecordName(domain string, recordName string, recordType string, client *dns_client.Client) error {
 	url := client.EndPoint + "/api/record/delete_by_record_name"
 	postData := commonMsg.Msg_Req_DeleteRecordByName{
-		DomainName: domain,
-		RecordName: recordName,
-		RecordType: recordType,
+		Domain_name: domain,
+		Record_name: recordName,
+		Record_type: recordType,
 	}
 	var resp api.API_META_STATUS
 	err := api.POST(url, client.Token, postData, &resp)
@@ -68,9 +68,9 @@ func DeleteByRecordName(domain string, recordName string, recordType string, cli
 func ForbiddenByRecordName(domain string, recordName string, forbidden bool, client *dns_client.Client) error {
 	url := client.EndPoint + "/api/record/update_by_record_name"
 	postData := commonMsg.Msg_Req_UpdateRecordByName{
-		DomainName: domain,
-		RecordName: recordName,
-		Forbidden:  &forbidden,
+		Domain_name: domain,
+		Record_name: recordName,
+		Forbidden:   &forbidden,
 	}
 	var resp api.API_META_STATUS
 	err := api.POST(url, client.Token, postData, &resp)
@@ -102,10 +102,10 @@ func ForbiddenByRecordName(domain string, recordName string, forbidden bool, cli
 func UpdateByRecordName(domain string, recordName string, ttl uint32, forbidden bool, client *dns_client.Client) error {
 	url := client.EndPoint + "/api/record/update_by_record_name"
 	postData := commonMsg.Msg_Req_UpdateRecordByName{
-		DomainName: domain,
-		RecordName: recordName,
-		TTL:        &ttl,
-		Forbidden:  &forbidden,
+		Domain_name: domain,
+		Record_name: recordName,
+		TTL:         &ttl,
+		Forbidden:   &forbidden,
 	}
 	var resp api.API_META_STATUS
 	err := api.POST(url, client.Token, postData, &resp)
@@ -138,9 +138,9 @@ func UpdateByRecordName(domain string, recordName string, ttl uint32, forbidden 
 func QueryByGivenList(domain string, recordNameArray []string, recordType string, client *dns_client.Client) ([]*commonMsg.Record, error) {
 	url := client.EndPoint + "/api/record/query_by_given_name"
 	postData := commonMsg.Msg_Req_QueryRecordByGivenName{
-		DomainName:     domain,
-		RecordNameList: recordNameArray,
-		RecordType:     recordType,
+		Domain_name:      domain,
+		Record_name_list: recordNameArray,
+		Record_type:      recordType,
 	}
 	var resp commonMsg.Msg_Resp_QueryRecordByGivenName
 	err := api.POST(url, client.Token, postData, &resp)
@@ -159,12 +159,12 @@ func QueryByGivenList(domain string, recordNameArray []string, recordType string
 func QueryByNamePattern(domain string, namePattern string, recordId uint, recordType string, limit int, offset int, client *dns_client.Client) (records []*commonMsg.Record, totalCount int64, e error) {
 	url := client.EndPoint + "/api/record/query_by_domain_name"
 	postData := commonMsg.Msg_Req_QueryRecordByDomainName{
-		DomainName:  domain,
-		NamePattern: namePattern,
-		RecordId:    recordId,
-		RecordType:  recordType,
-		Limit:       limit,
-		Offset:      offset,
+		Domain_name:  domain,
+		Name_pattern: namePattern,
+		Record_id:    recordId,
+		Record_type:  recordType,
+		Limit:        limit,
+		Offset:       offset,
 	}
 	var resp commonMsg.Msg_Resp_QueryRecord
 	err := api.POST(url, client.Token, postData, &resp)
