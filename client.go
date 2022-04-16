@@ -21,14 +21,14 @@ func New(token string, endPoint string) (*Client, error) {
 	if err != nil {
 		return nil, err
 	}
-	if resp.User.ID == 0 {
+	if resp.User.Id == 0 {
 		return nil, errors.New("user not exist")
 	}
 
 	client := &Client{
 		EndPoint: endPoint,
 		Token:    token,
-		UserInfo: &resp.User,
+		UserInfo: resp.User,
 	}
 
 	return client, nil

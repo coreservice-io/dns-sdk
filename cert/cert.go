@@ -11,12 +11,12 @@ import (
 func Apply(applyDomain string, pullZoneName string, hostedDomain string, client *dns_client.Client) (cert string, key string, err error) {
 	url := client.EndPoint + "/api/cert/apply/custom"
 	postData := commonMsg.Msg_Req_ApplyCustomCert{
-		Apply_domain:   applyDomain,
-		Pull_zone_name: pullZoneName,
-		Hosted_domain:  hostedDomain,
+		Apply_domain:  applyDomain,
+		Txt_name_tag:  pullZoneName,
+		Hosted_domain: hostedDomain,
 	}
 
-	var resp commonMsg.Msg_Resp_CertContent
+	var resp commonMsg.Msg_Resp_ApplyCustomCert
 	err = api.POST_(url, client.Token, postData, 120, &resp)
 	if err != nil {
 		return "", "", err
