@@ -5,7 +5,6 @@ import (
 
 	dns_common "github.com/coreservice-io/dns-common"
 	"github.com/coreservice-io/dns-common/commonMsg"
-	domainMgr "github.com/coreservice-io/dns-sdk/domain"
 	"github.com/coreservice-io/dns-sdk/tools/api"
 )
 
@@ -15,7 +14,7 @@ func (c *Client) AddRecord(domainName string, recordName string, recordType stri
 	}
 
 	//get domain id
-	domainInfo, err := domainMgr.Query(domainName, c)
+	domainInfo, err := c.QueryDomain(domainName)
 	if err != nil {
 		return nil, err
 	}
