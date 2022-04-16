@@ -9,14 +9,7 @@ import (
 	"github.com/coreservice-io/dns-sdk/tools/api"
 )
 
-type NewRuleData struct {
-	ContinentCode string
-	CountryCode   string
-	Destination   string
-	Weight        int64
-}
-
-func AddRule(domainName string, recordName string, recordType string, rules []*NewRuleData, client *dns_client.Client) ([]*commonMsg.Rule, error) {
+func AddRule(domainName string, recordName string, recordType string, rules []*dns_client.NewRuleData, client *dns_client.Client) ([]*commonMsg.Rule, error) {
 	//get record id
 	records, _, err := record.Query(domainName, []string{recordName}, recordType, 1, 0, client)
 	if err != nil {
