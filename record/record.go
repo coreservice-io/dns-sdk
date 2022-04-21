@@ -107,7 +107,7 @@ func Query(domainName string, recordNameArray []string, recordType string, limit
 		return
 	}
 
-	url := client.EndPoint + "/api/record/query_by_given_name"
+	url := client.EndPoint + "/api/record/query"
 	postData := commonMsg.Msg_Req_QueryRecord{
 		Filter: commonMsg.Msg_Req_QueryRecord_Filter{
 			Domain_id: &domainInfo.Id,
