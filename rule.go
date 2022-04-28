@@ -77,7 +77,7 @@ func (c *Client) QueryRules(domainName string, recordName string, recordType str
 	return resp.Rules, nil
 }
 
-func (c *Client) DeleteRule(ids []int64) error {
+func (c *Client) DeleteRules(ids []int64) error {
 	url := c.EndPoint + "/api/rule/delete"
 	for _, v := range ids {
 		postData := commonMsg.Msg_Req_DeleteRule{
@@ -97,7 +97,7 @@ func (c *Client) DeleteRule(ids []int64) error {
 	return nil
 }
 
-func (c *Client) DeleteRules(domainName string, recordName string, recordType string) error {
+func (c *Client) DeleteAllRules(domainName string, recordName string, recordType string) error {
 	rules, err := c.QueryRules(domainName, recordName, recordType)
 	if err != nil {
 		return err
@@ -110,5 +110,5 @@ func (c *Client) DeleteRules(domainName string, recordName string, recordType st
 	for _, v := range rules {
 		ids = append(ids, v.Id)
 	}
-	return c.DeleteRule(ids)
+	return c.DeleteRules(ids)
 }
