@@ -77,6 +77,26 @@ func (c *Client) QueryRules(domainName string, recordName string, recordType str
 	return resp.Rules, nil
 }
 
+func (c *Client) DeleteRule(ids []int64) error {
+	url := c.EndPoint + "/api/rule/delete"
+	for _, v := range ids {
+		postData := commonMsg.Msg_Req_DeleteRule{
+			Filter: commonMsg.Msg_Req_DeleteRule_Filter{
+				Id: []int64{v},
+			},
+		}
+		var resp commonMsg.API_META_STATUS
+		err := api.POST(url, c.Token, postData, &resp)
+		if err != nil {
+			return err
+		}
+		if resp.Meta_status < 0 {
+			return errors.New(resp.Meta_message)
+		}
+	}
+	return nil
+}
+
 func (c *Client) DeleteRules(domainName string, recordName string, recordType string) error {
 	rules, err := c.QueryRules(domainName, recordName, recordType)
 	if err != nil {
@@ -86,21 +106,9 @@ func (c *Client) DeleteRules(domainName string, recordName string, recordType st
 		return nil
 	}
 
-	url := c.EndPoint + "/api/rule/delete"
+	ids := []int64{}
 	for _, v := range rules {
-		postData := commonMsg.Msg_Req_DeleteRule{
-			Filter: commonMsg.Msg_Req_DeleteRule_Filter{
-				Id: []int64{v.Id},
-			},
-		}
-		var resp commonMsg.API_META_STATUS
-		err = api.POST(url, c.Token, postData, &resp)
-		if err != nil {
-			return err
-		}
-		if resp.Meta_status < 0 {
-			return errors.New(resp.Meta_message)
-		}
+		ids = append(ids, v.Id)
 	}
-	return nil
+	return c.DeleteRule(ids)
 }
