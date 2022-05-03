@@ -3,7 +3,7 @@ package dns_client
 import (
 	"errors"
 
-	"github.com/coreservice-io/dns-common/commonMsg"
+	"github.com/coreservice-io/dns-common/common_msg"
 	"github.com/coreservice-io/dns-sdk/tools/api"
 )
 
@@ -14,7 +14,7 @@ type NewRuleData struct {
 	Weight        int64
 }
 
-func (c *Client) AddRule(domainName string, recordName string, recordType string, rules []*NewRuleData) ([]*commonMsg.Rule, error) {
+func (c *Client) AddRule(domainName string, recordName string, recordType string, rules []*NewRuleData) ([]*common_msg.Rule, error) {
 	//get record id
 	records, _, err := c.QueryRecord(domainName, []string{recordName}, recordType, 1, 0)
 	if err != nil {
@@ -24,10 +24,10 @@ func (c *Client) AddRule(domainName string, recordName string, recordType string
 		return nil, errors.New("record not exsit")
 	}
 
-	newRules := []*commonMsg.Rule{}
+	newRules := []*common_msg.Rule{}
 	url := c.EndPoint + "/api/rule/add"
 	for _, v := range rules {
-		postData := commonMsg.Msg_Req_AddRule{
+		postData := common_msg.Msg_Req_AddRule{
 			Record_id:      records[0].Id,
 			Continent_code: v.ContinentCode,
 			Country_code:   v.CountryCode,
@@ -35,7 +35,7 @@ func (c *Client) AddRule(domainName string, recordName string, recordType string
 			Weight:         v.Weight,
 		}
 
-		var resp commonMsg.Msg_Resp_AddRule
+		var resp common_msg.Msg_Resp_AddRule
 		err := api.POST(url, c.Token, postData, &resp)
 		if err != nil {
 			return nil, err
@@ -49,7 +49,7 @@ func (c *Client) AddRule(domainName string, recordName string, recordType string
 	return newRules, nil
 }
 
-func (c *Client) QueryRules(domainName string, recordName string, recordType string) ([]*commonMsg.Rule, error) {
+func (c *Client) QueryRules(domainName string, recordName string, recordType string) ([]*common_msg.Rule, error) {
 	//get record id
 	records, _, err := c.QueryRecord(domainName, []string{recordName}, recordType, 1, 0)
 	if err != nil {
@@ -60,12 +60,12 @@ func (c *Client) QueryRules(domainName string, recordName string, recordType str
 	}
 
 	url := c.EndPoint + "/api/rule/query"
-	postData := commonMsg.Msg_Req_QueryRule{
-		Filter: commonMsg.Msg_Req_QueryRule_Filter{
+	postData := common_msg.Msg_Req_QueryRule{
+		Filter: common_msg.Msg_Req_QueryRule_Filter{
 			Record_id: records[0].Id,
 		},
 	}
-	var resp commonMsg.Msg_Resp_QueryRules
+	var resp common_msg.Msg_Resp_QueryRules
 	err = api.POST(url, c.Token, postData, &resp)
 	if err != nil {
 		return nil, err
@@ -80,12 +80,12 @@ func (c *Client) QueryRules(domainName string, recordName string, recordType str
 func (c *Client) DeleteRules(ids []int64) error {
 	url := c.EndPoint + "/api/rule/delete"
 	for _, v := range ids {
-		postData := commonMsg.Msg_Req_DeleteRule{
-			Filter: commonMsg.Msg_Req_DeleteRule_Filter{
+		postData := common_msg.Msg_Req_DeleteRule{
+			Filter: common_msg.Msg_Req_DeleteRule_Filter{
 				Id: []int64{v},
 			},
 		}
-		var resp commonMsg.API_META_STATUS
+		var resp common_msg.API_META_STATUS
 		err := api.POST(url, c.Token, postData, &resp)
 		if err != nil {
 			return err

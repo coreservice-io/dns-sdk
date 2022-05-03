@@ -4,11 +4,11 @@ import (
 	"errors"
 
 	dns_common "github.com/coreservice-io/dns-common"
-	"github.com/coreservice-io/dns-common/commonMsg"
+	"github.com/coreservice-io/dns-common/common_msg"
 	"github.com/coreservice-io/dns-sdk/tools/api"
 )
 
-func (c *Client) AddRecord(domainName string, recordName string, recordType string, ttl uint32) (*commonMsg.Record, error) {
+func (c *Client) AddRecord(domainName string, recordName string, recordType string, ttl uint32) (*common_msg.Record, error) {
 	if recordType != dns_common.TypeCNAME && recordType != dns_common.TypeA {
 		return nil, errors.New("only support A and CNAME record")
 	}
@@ -20,14 +20,14 @@ func (c *Client) AddRecord(domainName string, recordName string, recordType stri
 	}
 
 	url := c.EndPoint + "/api/record/add"
-	postData := commonMsg.Msg_Req_AddRecord{
+	postData := common_msg.Msg_Req_AddRecord{
 		Domain_id: domainInfo.Id,
 		Name:      recordName,
 		Type:      recordType,
 		TTL:       ttl,
 	}
 
-	var resp commonMsg.Msg_Resp_AddRecord
+	var resp common_msg.Msg_Resp_AddRecord
 	err = api.POST(url, c.Token, postData, &resp)
 	if err != nil {
 		return nil, err
@@ -50,8 +50,8 @@ func (c *Client) DeleteRecord(domainName string, recordName string, recordType s
 	}
 
 	url := c.EndPoint + "/api/record/delete"
-	postData := commonMsg.Msg_Req_DeleteRecord{
-		Filter: commonMsg.Msg_Req_DeleteRecord_Filter{
+	postData := common_msg.Msg_Req_DeleteRecord{
+		Filter: common_msg.Msg_Req_DeleteRecord_Filter{
 			Id: []int64{records[0].Id},
 		},
 	}
@@ -77,11 +77,11 @@ func (c *Client) UpdateRecord(domainName string, recordName string, recordType s
 	}
 
 	url := c.EndPoint + "/api/record/update"
-	postData := commonMsg.Msg_Req_UpdateRecord{
-		Filter: commonMsg.Msg_Req_UpdateRecord_Filter{
+	postData := common_msg.Msg_Req_UpdateRecord{
+		Filter: common_msg.Msg_Req_UpdateRecord_Filter{
 			Id: []int64{},
 		},
-		Update: commonMsg.Msg_Req_UpdateRecord_To{
+		Update: common_msg.Msg_Req_UpdateRecord_To{
 			TTL:       ttl,
 			Forbidden: forbidden,
 		},
@@ -97,8 +97,8 @@ func (c *Client) UpdateRecord(domainName string, recordName string, recordType s
 	return nil
 }
 
-func (c *Client) QueryRecord(domainName string, recordNameArray []string, recordType string, limit int, offset int) (records []*commonMsg.Record, totalCount int64, err error) {
-	records = []*commonMsg.Record{}
+func (c *Client) QueryRecord(domainName string, recordNameArray []string, recordType string, limit int, offset int) (records []*common_msg.Record, totalCount int64, err error) {
+	records = []*common_msg.Record{}
 	//get domain id
 	domainInfo, err := c.QueryDomain(domainName)
 	if err != nil {
@@ -106,8 +106,8 @@ func (c *Client) QueryRecord(domainName string, recordNameArray []string, record
 	}
 
 	url := c.EndPoint + "/api/record/query"
-	postData := commonMsg.Msg_Req_QueryRecord{
-		Filter: commonMsg.Msg_Req_QueryRecord_Filter{
+	postData := common_msg.Msg_Req_QueryRecord{
+		Filter: common_msg.Msg_Req_QueryRecord_Filter{
 			Domain_id: &domainInfo.Id,
 			Name:      &recordNameArray,
 			Type:      &[]string{recordType},
@@ -115,7 +115,7 @@ func (c *Client) QueryRecord(domainName string, recordNameArray []string, record
 		Limit:  limit,
 		Offset: offset,
 	}
-	var resp commonMsg.Msg_Resp_QueryRecord
+	var resp common_msg.Msg_Resp_QueryRecord
 	err = api.POST(url, c.Token, postData, &resp)
 	if err != nil {
 		return
