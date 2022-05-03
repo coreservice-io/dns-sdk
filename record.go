@@ -110,7 +110,7 @@ func (c *Client) QueryRecord(domainName string, recordNameArray []string, record
 		Filter: commonMsg.Msg_Req_QueryRecord_Filter{
 			Domain_id: &domainInfo.Id,
 			Name:      &recordNameArray,
-			Type:      &recordType,
+			Type:      &[]string{recordType},
 		},
 		Limit:  limit,
 		Offset: offset,
