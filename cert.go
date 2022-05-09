@@ -7,11 +7,11 @@ import (
 	"github.com/coreservice-io/dns-sdk/tools/api"
 )
 
-func (c *Client) ApplyCert(applyDomain string, pullZoneName string, hostedDomain string) (cert string, key string, err error) {
+func (c *Client) ApplyCert(applyDomain string, tag string, hostedDomain string) (cert string, key string, err error) {
 	url := c.EndPoint + "/api/cert/apply/custom"
 	postData := common_msg.Msg_Req_ApplyCustomCert{
 		Apply_domain:  applyDomain,
-		Txt_name_tag:  pullZoneName,
+		Txt_name_tag:  tag,
 		Hosted_domain: hostedDomain,
 	}
 

@@ -1,5 +1,5 @@
-github.com/coreservice-io/dns-common v0.0.20 h1:KXlIEAdHh6uP4A8F7XkVfg7nfIvivq9N+eRFAb4cAPY=
-github.com/coreservice-io/dns-common v0.0.20/go.mod h1:KfllkFhOKt+Pq0jwSTQWdP2Db641tfhxK7bq5lc4yOc=
+github.com/coreservice-io/dns-common v0.0.27 h1:/9qrpCwq0QKXWvzd3uh2lRNuW5KOV6DDFLqmLV0UK88=
+github.com/coreservice-io/dns-common v0.0.27/go.mod h1:KfllkFhOKt+Pq0jwSTQWdP2Db641tfhxK7bq5lc4yOc=
 github.com/imroc/req v0.3.2 h1:M/JkeU6RPmX+WYvT2vaaOL0K+q8ufL5LxwvJc4xeB4o=
 github.com/imroc/req v0.3.2/go.mod h1:F+NZ+2EFSo6EFXdeIbpfE9hcC233id70kf0byW97Caw=
 github.com/miekg/dns v1.1.48/go.mod h1:e3IlAVfNqAllflbibAZEWOXOQ+Ynzk/dDozDxY7XnME=
