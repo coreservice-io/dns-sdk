@@ -46,7 +46,7 @@ func (c *Client) DeleteRecord(domainName string, recordName string, recordType s
 		return err
 	}
 	if len(records) == 0 {
-		return errors.New("record not exsit")
+		return nil
 	}
 
 	url := c.EndPoint + "/api/record/delete"
